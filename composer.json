@@ -5,7 +5,7 @@
   "homepage": "https://www.undkonsorten.com",
   "license": ["GPL-2.0+"],
   "keywords": ["cw_twitter", "twitter"],
-  "version": "2.0.0",
+  "version": "7.6.0",
   "require": {
     "typo3/cms": "~7.6"
   },
