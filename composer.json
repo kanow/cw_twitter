@@ -1,0 +1,15 @@
+{
+  "name": "undkonsorten/cw-twitter",
+  "type": "typo3-cms-extension",
+  "description": "cw_twitter fork for TYPO3 7.6",
+  "homepage": "https://www.undkonsorten.com",
+  "license": ["GPL-2.0+"],
+  "keywords": ["cw_twitter", "twitter"],
+  "version": "2.0.0",
+  "require": {
+    "typo3/cms": "~7.6"
+  },
+  "autoload": {
+    "classmap" : ["Classes"]
+  }
+}

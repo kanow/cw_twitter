@@ -10,6 +10,7 @@
  * writing. "version" and "dependencies" must not be touched!
  ***************************************************************/
 
+/** @noinspection PhpUndefinedVariableInspection */
 $EM_CONF[$_EXTKEY] = array (
 	'title' => 'Twitter feed',
 	'description' => 'Show tweets from user or search query on frontend. Compatible with the new Twitter API (1.1).',
@@ -27,7 +28,7 @@ $EM_CONF[$_EXTKEY] = array (
 	'modify_tables' => '',
 	'clearCacheOnLoad' => 0,
 	'lockType' => '',
-	'version' => '1.1.9',
+	'version' => '2.0.0',
 	'constraints' =>
 
 	array (
@@ -35,7 +36,7 @@ $EM_CONF[$_EXTKEY] = array (
 		array (
 			'extbase' => '1.3',
 			'fluid' => '1.3',
-			'typo3' => '4.5.0-6.2.99',
+			'typo3' => '7.6.0',
 		),
 		'conflicts' =>
 		array (
