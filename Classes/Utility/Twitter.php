@@ -1,4 +1,5 @@
 <?php
+namespace CmsWorks\CwTwitter\Utility;
 /* * *************************************************************
  *  Copyright notice
  *
@@ -23,7 +24,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
-require_once(t3lib_extMgm::extPath('cw_twitter').'Classes/Contrib/OAuth.php');
+//require_once(t3lib_extMgm::extPath('cw_twitter').'Classes/Contrib/OAuth.php');
 
 /**
  *
@@ -32,7 +33,7 @@ require_once(t3lib_extMgm::extPath('cw_twitter').'Classes/Contrib/OAuth.php');
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_CwTwitter_Utility_Twitter {
+class Twitter {
 
 	/**
 	 * @var t3lib_cache_frontend_AbstractFrontend
@@ -60,15 +61,15 @@ class Tx_CwTwitter_Utility_Twitter {
 	 * Construct Twitter-object from settings
 	 *
 	 * @param array $settings
-	 * @return Tx_CwTwitter_Utility_Twitter
+	 * @return \CmsWorks\CwTwitter\Utility\Twitter
 	 */
 	public static function getTwitterFromSettings($settings) {
 		if(!$settings['oauth']['consumer']['key'] || !$settings['oauth']['consumer']['secret'] || !$settings['oauth']['token']['key'] || !$settings['oauth']['token']['secret']) {
-			throw new Tx_CwTwitter_Exception_ConfigurationException("Missing OAuth keys and/or secrets.", 1362059167);
+			throw new \CmsWorks\CwTwitter\Exception\ConfigurationException("Missing OAuth keys and/or secrets.", 1362059167);
 
 		}
 
-		$twitter = new Tx_CwTwitter_Utility_Twitter();
+		$twitter = new \CmsWorks\CwTwitter\Utility\Twitter();
 		$twitter->setConsumer($settings['oauth']['consumer']['key'], $settings['oauth']['consumer']['secret']);
 		$twitter->setToken($settings['oauth']['token']['key'], $settings['oauth']['token']['secret']);
 
@@ -91,7 +92,7 @@ class Tx_CwTwitter_Utility_Twitter {
 				return $twitter->getTweetsFromSearch($settings['query'], $limit);
 				break;
 			default:
-				throw new Tx_CwTwitter_Exception_ConfigurationException("Invalid mode specified.", 1362059199);
+				throw new \CmsWorks\CwTwitter\Exception\ConfigurationException("Invalid mode specified.", 1362059199);
 				break;
 		}
 	}
@@ -207,7 +208,7 @@ class Tx_CwTwitter_Utility_Twitter {
 	 */
 	protected function getData($path, $params, $method = 'GET') {
 		if(!function_exists('curl_init')) {
-			throw new Tx_CwTwitter_Exception_ConfigurationException("PHP Curl functions not available on this server", 1362059213);
+			throw new \CmsWorks\CwTwitter\Exception\ConfigurationException("PHP Curl functions not available on this server", 1362059213);
 		}
 
 		if($method === 'GET') {
@@ -229,7 +230,7 @@ class Tx_CwTwitter_Utility_Twitter {
 		$response = curl_exec($hCurl);
 
 		if($response === False) {
-			throw new Tx_CwTwitter_Exception_RequestException(sprintf("Error in request: '%s'", curl_error($hCurl)), 1362059229);
+			throw new \CmsWorks\CwTwitter\Exception\RequestException(sprintf("Error in request: '%s'", curl_error($hCurl)), 1362059229);
 		}
 
 		$response = json_decode($response);
@@ -238,7 +239,7 @@ class Tx_CwTwitter_Utility_Twitter {
 			foreach($response->errors as $error) {
 				$msg .= sprintf("\n%d: %s", $error->code, $error->message);
 			}
-			throw new Tx_CwTwitter_Exception_RequestException($msg, 1362059237);
+			throw new \CmsWorks\CwTwitter\Exception\RequestException($msg, 1362059237);
 		}
 
 		if($method == 'GET') {

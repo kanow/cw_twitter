@@ -1,4 +1,5 @@
 <?php
+namespace CmsWorks\CwTwitter\Contrib;
 /**
  * The MIT License
  *
@@ -25,7 +26,7 @@
 
 /* Generic exception class
  */
-class OAuthException extends Exception {
+class OAuthException extends \TYPO3\CMS\Core\Exception {
   // pass
 }
 

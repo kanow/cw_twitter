@@ -1,4 +1,6 @@
 <?php
+namespace CmsWorks\CwTwitter\Controller;
+
 /* * *************************************************************
  *  Copyright notice
  *
@@ -30,13 +32,13 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_CwTwitter_Controller_TweetController extends Tx_Extbase_MVC_Controller_ActionController {
+class TweetController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
 
 	/**
-	 * @param Tx_Extbase_MVC_View_ViewInterface $view
+	 * @param \TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view
 	 * @return void
 	 */
-	protected function initializeView(Tx_Extbase_MVC_View_ViewInterface $view) {
+	protected function initializeView(\TYPO3\CMS\Extbase\Mvc\View\ViewInterface $view) {
 		$view->assign('contentObjectData', $this->configurationManager->getContentObject()->data);
 	}
 
@@ -47,15 +49,15 @@ class Tx_CwTwitter_Controller_TweetController extends Tx_Extbase_MVC_Controller_
 	 */
 	public function listAction() {
 		try {
-			$tweets = Tx_CwTwitter_Utility_Twitter::getTweetsFromSettings($this->settings);
+			$tweets = \CmsWorks\CwTwitter\Utility\Twitter::getTweetsFromSettings($this->settings);
 			if($this->settings['mode'] == 'timeline') {
-				$this->view->assign('user', Tx_CwTwitter_Utility_Twitter::getUserFromSettings($this->settings));
+				$this->view->assign('user', \CmsWorks\CwTwitter\Utility\Twitter::getUserFromSettings($this->settings));
 			}
 		}
-		catch(Tx_CwTwitter_Exception_ConfigurationException $e) {
+		catch(\CmsWorks\CwTwitter\Exception\ConfigurationException $e) {
 			return $e->getMessage();
 		}
-		catch(Tx_CwTwitter_Exception_RequestException $e) {
+		catch(\CmsWorks\CwTwitter\Exception\RequestException $e) {
 			t3lib_div::sysLog($e->getMessage(), 'cw_twitter', 3);
 			$this->view->assign('error', $e);
 		}

@@ -1,4 +1,5 @@
 <?php
+namespace CmsWorks\CwTwitter\Exception;
 /* * *************************************************************
  *  Copyright notice
  *
@@ -22,6 +23,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
+use TYPO3\CMS\Rtehtmlarea\Extension\Typo3Color;
 
 /**
  *
@@ -30,7 +32,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_CwTwitter_Exception_RequestException extends Exception {
+class RequestException extends \TYPO3\CMS\Core\Exception {
 
 }
 ?>

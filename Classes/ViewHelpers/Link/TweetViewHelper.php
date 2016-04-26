@@ -1,4 +1,5 @@
 <?php
+namespace CmsWorks\CwTwitter\ViewHelpers\Link;
 /* * *************************************************************
  *  Copyright notice
  *
@@ -30,7 +31,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_CwTwitter_ViewHelpers_Link_TweetViewHelper extends Tx_CwTwitter_ViewHelpers_Link_Tweet_AbstractViewHelper {
+class TweetViewHelper extends \CmsWorks\CwTwitter\ViewHelpers\Link\Tweet\AbstractViewHelper {
 	protected $path = '{user}/status/{id_str}';
 }
 ?>

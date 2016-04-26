@@ -1,4 +1,5 @@
 <?php
+namespace CmsWorks\CwTwitter\Exception;
 /* * *************************************************************
  *  Copyright notice
  *
@@ -30,7 +31,7 @@
  * @license http://www.gnu.org/licenses/gpl.html GNU General Public License, version 3 or later
  *
  */
-class Tx_CwTwitter_Exception_ConfigurationException extends Exception {
+class ConfigurationException extends \TYPO3\CMS\Core\Exception {
 
 }
 ?>
