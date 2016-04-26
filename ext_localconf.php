@@ -51,7 +51,7 @@ if( !isset($GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations'][
 
 /** @noinspection PhpUndefinedVariableInspection */
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	$_EXTKEY,
+	'CmsWorks'.$_EXTKEY,
 	'Pi1',
 	array(
 		'Tweet' => 'list',

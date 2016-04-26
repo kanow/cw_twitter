@@ -5,7 +5,7 @@ if (!defined('TYPO3_MODE')) {
 
 /** @noinspection PhpUndefinedVariableInspection */
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	$_EXTKEY,
+    'CmsWorks'.$_EXTKEY,
 	'Pi1',
 	'Twitter feed'
 );
