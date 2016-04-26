@@ -34,4 +34,4 @@ namespace CmsWorks\CwTwitter\ViewHelpers\Link\Tweet;
 class FavoriteViewHelper extends \CmsWorks\CwTwitter\ViewHelpers\Link\Tweet\AbstractViewHelper {
 	protected $path = 'intent/favorite?tweet_id={id}';
 }
-?>
+

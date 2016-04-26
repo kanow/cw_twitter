@@ -73,4 +73,4 @@ abstract class AbstractViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\Abstr
 		return $this->tag->render();
 	}
 }
-?>
+

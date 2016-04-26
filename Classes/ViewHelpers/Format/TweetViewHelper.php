@@ -141,4 +141,3 @@ class TweetViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelpe
 		return $contentObject->cObjGetSingle($type, $tsObj);
 	}
 }
-?>

@@ -16,4 +16,3 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['cwtwitter_pi
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'Twitter feed');
 
-?>

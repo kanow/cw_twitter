@@ -34,4 +34,3 @@ namespace CmsWorks\CwTwitter\Exception;
 class ConfigurationException extends \TYPO3\CMS\Core\Exception {
 
 }
-?>

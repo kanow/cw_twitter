@@ -34,4 +34,4 @@ namespace CmsWorks\CwTwitter\ViewHelpers\Link\Tweet;
 class ReplyViewHelper extends \CmsWorks\CwTwitter\ViewHelpers\Link\Tweet\AbstractViewHelper {
 	protected $path = 'intent/tweet?in_reply_to={id}';
 }
-?>
+

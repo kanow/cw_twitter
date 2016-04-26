@@ -34,4 +34,4 @@ namespace CmsWorks\CwTwitter\ViewHelpers\Link\Tweet;
 class RetweetViewHelper extends \CmsWorks\CwTwitter\ViewHelpers\Link\Tweet\AbstractViewHelper {
 	protected $path = 'intent/retweet?tweet_id={id}';
 }
-?>
+

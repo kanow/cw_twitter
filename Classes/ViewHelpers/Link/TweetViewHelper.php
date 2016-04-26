@@ -34,4 +34,4 @@ namespace CmsWorks\CwTwitter\ViewHelpers\Link;
 class TweetViewHelper extends \CmsWorks\CwTwitter\ViewHelpers\Link\Tweet\AbstractViewHelper {
 	protected $path = '{user}/status/{id_str}';
 }
-?>
+

@@ -35,4 +35,3 @@ use TYPO3\CMS\Rtehtmlarea\Extension\Typo3Color;
 class RequestException extends \TYPO3\CMS\Core\Exception {
 
 }
-?>
