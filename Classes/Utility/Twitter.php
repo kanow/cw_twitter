@@ -35,10 +35,10 @@ namespace CmsWorks\CwTwitter\Utility;
  */
 class Twitter {
 
-	/**
-	 * @var t3lib_cache_frontend_AbstractFrontend
-	 */
-	protected $cache;
+//	/**
+//	 * @var t3lib_cache_frontend_AbstractFrontend
+//	 */
+//	protected $cache;
 
 	/**
 	 * @var OAuthConsumer
@@ -109,17 +109,25 @@ class Twitter {
 	 * @return void
 	 */
 	public function __construct() {
-		t3lib_cache::initializeCachingFramework();
+//		t3lib_cache::initializeCachingFramework();
+//        try {
+//            $this->cache = $GLOBALS['typo3CacheManager']->getCache('cwtwitter_queries');
+//        }
         try {
-            $this->cache = $GLOBALS['typo3CacheManager']->getCache('cwtwitter_queries');
+            $name = 'TYPO3\\CMS\\Core\\Cache\\CacheManager';
+            $manager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance( $name );
+            $this->cache = $manager->getCache( 'cwtwitter_queries' );
         }
-        catch (t3lib_cache_exception_NoSuchCache $e) {
-            $this->cache = $GLOBALS['typo3CacheFactory']->create(
-                'cwtwitter_queries',
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['frontend'],
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['backend'],
-                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['options']
-            );
+//        catch (t3lib_cache_exception_NoSuchCache $e) {
+//            $this->cache = $GLOBALS['typo3CacheFactory']->create(
+//                'cwtwitter_queries',
+//                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['frontend'],
+//                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['backend'],
+//                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['options']
+//            );
+//        }
+        catch (\TYPO3\CMS\Core\Cache\Exception\CacheManagerNoSuchCacheException $e) {
+            $this->cache = $manager->createCache('cwtwitter_queries');
         }
 	}
 
@@ -261,4 +269,3 @@ class Twitter {
 		return md5(sprintf('%s|%s', $path, implode(',', $params)));
 	}
 }
-?>
