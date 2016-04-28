@@ -23,6 +23,8 @@ namespace CmsWorks\CwTwitter\ViewHelpers\Format;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 
 /**
  *
@@ -135,7 +137,7 @@ class TweetViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelpe
 	protected function getDataFromParser($path, $data) {
 		list($type, $tsObj) = $this->getTypoScriptObject($path);
 
-		$contentObject = t3lib_div::makeInstance('tslib_cObj');
+		$contentObject = GeneralUtility::makeInstance(ContentObjectRenderer::class);
 		$contentObject->start(get_object_vars($data));
 
 		return $contentObject->cObjGetSingle($type, $tsObj);

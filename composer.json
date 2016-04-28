@@ -10,6 +10,8 @@
     "typo3/cms": "~7.6"
   },
   "autoload": {
-    "classmap" : ["Classes"]
+      "psr-4": {
+          "CmsWorks\\CwTwitter\\": "Classes"
+      }
   }
 }

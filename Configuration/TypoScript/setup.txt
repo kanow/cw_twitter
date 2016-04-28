@@ -46,9 +46,15 @@ plugin.tx_cwtwitter {
 		}
 	}
 	view {
-		templateRootPath = {$plugin.tx_cwtwitter.view.templateRootPath}
-		partialRootPath = {$plugin.tx_cwtwitter.view.partialRootPath}
-		layoutRootPath = {$plugin.tx_cwtwitter.view.layoutRootPath}
+        templateRootPaths {
+            10 = {$plugin.tx_cwtwitter.view.templateRootPath}
+        }
+        partialRootPaths {
+            10 = {$plugin.tx_cwtwitter.view.partialRootPath}
+        }
+        layoutRootPaths {
+            10 = {$plugin.tx_cwtwitter.view.layoutRootPath}
+        }
 	}
 	persistence {
 		storagePid = {$plugin.tx_cwtwitter.persistence.storagePid}

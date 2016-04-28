@@ -24,6 +24,7 @@ namespace CmsWorks\CwTwitter\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  *
@@ -58,12 +59,14 @@ class TweetController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 			return $e->getMessage();
 		}
 		catch(\CmsWorks\CwTwitter\Exception\RequestException $e) {
-			t3lib_div::sysLog($e->getMessage(), 'cw_twitter', 3);
+			GeneralUtility::sysLog($e->getMessage(), 'cw_twitter', 3);
 			$this->view->assign('error', $e);
 		}
 
 		$this->view->assignMultiple(array(
 			'tweets' => $tweets,
 		));
+
+
 	}
 }
