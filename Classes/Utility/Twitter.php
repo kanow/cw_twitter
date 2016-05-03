@@ -24,7 +24,14 @@ namespace CmsWorks\CwTwitter\Utility;
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
-//require_once(t3lib_extMgm::extPath('cw_twitter').'Classes/Contrib/OAuth.php');
+use CmsWorks\CwTwitter\Exception\ConfigurationException;
+use CmsWorks\CwTwitter\Exception\RequestException;
+use OAuth\Consumer;
+use OAuth\Request;
+use OAuth\SignatureMethod\HmacSha1;
+use OAuth\Token;
+use TYPO3\CMS\Core\Cache\CacheManager;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  *
@@ -35,18 +42,18 @@ namespace CmsWorks\CwTwitter\Utility;
  */
 class Twitter {
 
-//	/**
-//	 * @var t3lib_cache_frontend_AbstractFrontend
-//	 */
-//	protected $cache;
+	/**
+	 * @var \TYPO3\CMS\Core\Cache\Frontend\AbstractFrontend
+	 */
+	protected $cache;
 
 	/**
-	 * @var \OAuth\Consumer
+	 * @var Consumer
 	 */
 	protected $consumer;
 
 	/**
-	 * @var \OAuth\Token
+	 * @var Token
 	 */
 	protected $token;
 
@@ -61,15 +68,16 @@ class Twitter {
 	 * Construct Twitter-object from settings
 	 *
 	 * @param array $settings
-	 * @return \CmsWorks\CwTwitter\Utility\Twitter
+	 * @return Twitter
+	 * @throws ConfigurationException
 	 */
 	public static function getTwitterFromSettings($settings) {
 		if(!$settings['oauth']['consumer']['key'] || !$settings['oauth']['consumer']['secret'] || !$settings['oauth']['token']['key'] || !$settings['oauth']['token']['secret']) {
-			throw new \CmsWorks\CwTwitter\Exception\ConfigurationException("Missing OAuth keys and/or secrets.", 1362059167);
+			throw new ConfigurationException("Missing OAuth keys and/or secrets.", 1362059167);
 
 		}
 
-		$twitter = new \CmsWorks\CwTwitter\Utility\Twitter();
+		$twitter = new Twitter();
 		$twitter->setConsumer($settings['oauth']['consumer']['key'], $settings['oauth']['consumer']['secret']);
 		$twitter->setToken($settings['oauth']['token']['key'], $settings['oauth']['token']['secret']);
 
@@ -79,6 +87,7 @@ class Twitter {
 	/**
 	 * @param array $settings
 	 * @return array
+	 * @throws ConfigurationException
 	 */
 	public static function getTweetsFromSettings($settings) {
 		$twitter = self::getTwitterFromSettings($settings);
@@ -92,7 +101,7 @@ class Twitter {
 				return $twitter->getTweetsFromSearch($settings['query'], $limit);
 				break;
 			default:
-				throw new \CmsWorks\CwTwitter\Exception\ConfigurationException("Invalid mode specified.", 1362059199);
+				throw new ConfigurationException("Invalid mode specified.", 1362059199);
 				break;
 		}
 	}
@@ -103,25 +112,14 @@ class Twitter {
 		return $twitter->getUser($settings['username']);
 	}
 
-//	/**
-//	 * Constructor
-//	 *
-//	 * @return void
-//	 */
-//	public function __construct() {
-//		t3lib_cache::initializeCachingFramework();
-//        try {
-//            $this->cache = $GLOBALS['typo3CacheManager']->getCache('cwtwitter_queries');
-//        }
-//        catch (t3lib_cache_exception_NoSuchCache $e) {
-//            $this->cache = $GLOBALS['typo3CacheFactory']->create(
-//                'cwtwitter_queries',
-//                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['frontend'],
-//                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['backend'],
-//                $GLOBALS['TYPO3_CONF_VARS']['SYS']['caching']['cacheConfigurations']['cwtwitter_queries']['options']
-//            );
-//        }
-//	}
+	/**
+	 * Constructor
+	 *
+	 * @throws \TYPO3\CMS\Core\Cache\Exception\NoSuchCacheException
+	 */
+	public function __construct() {
+		$this->cache = GeneralUtility::makeInstance(CacheManager::class)->getCache('cwtwitter_queries');
+	}
 
 	/**
 	 * Sets consumer based on key and secret
@@ -131,7 +129,7 @@ class Twitter {
 	 * @return void
 	 */
 	public function setConsumer($key, $secret) {
-		$this->consumer = new \OAuth\Consumer($key, $secret);
+		$this->consumer = new Consumer($key, $secret);
 	}
 
 	/**
@@ -142,7 +140,7 @@ class Twitter {
 	 * @return void
 	 */
 	public function setToken($key, $secret) {
-		$this->token = new \OAuth\Token($key, $secret);
+		$this->token = new Token($key, $secret);
 	}
 
 	/**
@@ -184,6 +182,7 @@ class Twitter {
 			$params['count'] = $limit;
 		}
 
+		/** @noinspection PhpUndefinedFieldInspection */
 		return $this->getData('search/tweets', $params)->statuses;
 	}
 
@@ -191,7 +190,7 @@ class Twitter {
 	 * Returns the user object for specified user
 	 *
 	 * @param string $user
-	 * @return stdClass
+	 * @return \stdClass
 	 */
 	public function getUser($user) {
 		return $this->getData('users/show', array(
@@ -205,20 +204,23 @@ class Twitter {
 	 * @param array $params
 	 * @param string $method
 	 * @return array
+	 * @throws ConfigurationException
+	 * @throws RequestException
+	 * @throws \OAuth\Exception
 	 */
 	protected function getData($path, $params, $method = 'GET') {
 		if(!function_exists('curl_init')) {
-			throw new \CmsWorks\CwTwitter\Exception\ConfigurationException("PHP Curl functions not available on this server", 1362059213);
+			throw new ConfigurationException("PHP Curl functions not available on this server", 1362059213);
 		}
 
-//		if($method === 'GET') {
-//			if($this->cache->has($this->calculateCacheKey($path, $params))) {
-//				return $this->cache->get($this->calculateCacheKey($path, $params));
-//			}
-//		}
+		if($method === 'GET') {
+			if($this->cache->has($this->calculateCacheKey($path, $params))) {
+				return $this->cache->get($this->calculateCacheKey($path, $params));
+			}
+		}
 
-		$request = \OAuth\Request::fromConsumerAndToken($this->consumer, $this->token, $method, $this->api_url.$path.'.json', $params);
-		$request->signRequest(new \OAuth\SignatureMethod\HmacSha1(), $this->consumer, $this->token);
+		$request = Request::fromConsumerAndToken($this->consumer, $this->token, $method, $this->api_url.$path.'.json', $params);
+		$request->signRequest(new HmacSha1(), $this->consumer, $this->token);
 
 		$hCurl = curl_init($request->toUrl());
 		curl_setopt_array($hCurl, array(
@@ -230,7 +232,7 @@ class Twitter {
 		$response = curl_exec($hCurl);
 
 		if($response === False) {
-			throw new \CmsWorks\CwTwitter\Exception\RequestException(sprintf("Error in request: '%s'", curl_error($hCurl)), 1362059229);
+			throw new RequestException(sprintf("Error in request: '%s'", curl_error($hCurl)), 1362059229);
 		}
 
 		$response = json_decode($response);
@@ -239,13 +241,12 @@ class Twitter {
 			foreach($response->errors as $error) {
 				$msg .= sprintf("\n%d: %s", $error->code, $error->message);
 			}
-			throw new \CmsWorks\CwTwitter\Exception\RequestException($msg, 1362059237);
+			throw new RequestException($msg, 1362059237);
 		}
 
-//		if($method == 'GET') {
-//			$conf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['cw_twitter']);
-//			$this->cache->set($this->calculateCacheKey($path, $params), $response, array(), $conf['lifetime']);
-//		}
+		if($method == 'GET') {
+			$this->cache->set($this->calculateCacheKey($path, $params), $response, array());
+		}
 
 		return $response;
 	}
@@ -255,7 +256,7 @@ class Twitter {
 	 *
 	 * @param string $path
 	 * @param array $params
-	 * @return void
+	 * @return string
 	 */
 	protected function calculateCacheKey($path, $params) {
 		return md5(sprintf('%s|%s', $path, implode(',', $params)));
